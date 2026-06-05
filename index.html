@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>free manduu</title>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap"
+rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+:root{
+--bg:#f6f8fb;
+--card:#ffffff;
+--text:#111827;
+--primary:#3b82f6;
+--accent:#10b981;
+}
+
+.dark{
+--bg:#111827;
+--card:#1f2937;
+--text:#f9fafb;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Noto Sans KR',sans-serif;
+}
+
+body{
+background:var(--bg);
+color:var(--text);
+padding:20px;
+transition:.3s;
+}
+
+.container{
+max-width:1200px;
+margin:auto;
+}
+
+.card{
+background:var(--card);
+padding:20px;
+border-radius:20px;
+margin-bottom:20px;
+box-shadow:0 5px 15px rgba(0,0,0,.08);
+}
+
+.btn{
+background:var(--primary);
+color:white;
+border:none;
+padding:12px 16px;
+border-radius:12px;
+cursor:pointer;
+}
+
+input,
+textarea,
+select{
+width:100%;
+padding:12px;
+margin-top:10px;
+margin-bottom:10px;
+border-radius:12px;
+border:1px solid #ddd;
+}
+
+.grid{
+display:grid;
+grid-template-columns:
+repeat(auto-fit,minmax(220px,1fr));
+gap:15px;
+}
+
+.hidden{
+display:none;
+}
+
+.hero{
+background:
+linear-gradient(
+135deg,
+#3b82f6,
+#10b981
+);
+
+color:white;
+
+padding:30px;
+
+border-radius:25px;
+
+margin-bottom:20px;
+}
+
+.stat-card{
+background:var(--card);
+padding:20px;
+border-radius:20px;
+text-align:center;
+}
+
+.event-item{
+padding:10px;
+margin-bottom:10px;
+border-radius:10px;
+background:#00000010;
+}
+
+.dark .event-item{
+background:#ffffff10;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div id="nameScreen" class="card">
+
+<h2>👋 이름 입력</h2>
+
+<input
+id="nameInput"
+placeholder="이름 입력">
+
+<button
+class="btn"
+onclick="saveName()">
+
+시작하기
+
+</button>
+
+</div>
+
+<div
+id="dashboard"
+class="hidden">
+
+  <div class="hero">
+
+<h1 id="greeting">
+Good Morning!
+</h1>
+
+<p id="todayDate"></p>
+
+<p id="quote"></p>
+
+</div>
+
+<div class="grid">
+
+<div class="stat-card">
+<h3>🌅 기상</h3>
+<h2 id="wakeCard">--:--</h2>
+</div>
+
+<div class="stat-card">
+<h3>📚 공부</h3>
+<h2 id="studyCard">0h</h2>
+</div>
+
+<div class="stat-card">
+<h3>💪 운동</h3>
+<h2 id="exerciseCard">0m</h2>
+</div>
+
+<div class="stat-card">
+<h3>📖 독서</h3>
+<h2 id="readingCard">0m</h2>
+</div>
+
+</div>
+
+<br>
+
+<div class="card">
+
+<h2>🎓 수능 D-Day</h2>
+
+<h1 id="suneungCountdown">
+D-000
+</h1>
+
+</div>
+
+<div class="card">
+
+<h2>🔥 연속 기록</h2>
+
+<h1 id="streak">
+1일째
+</h1>
+
+</div>
+
+<div class="card">
+
+<h2>📝 오늘 기록</h2>
+
+<label>기상 시간</label>
+<input type="time" id="wakeTime">
+
+<label>취침 시간</label>
+<input type="time" id="sleepTime">
+
+<label>공부 시간(분)</label>
+<input type="number" id="studyMinutes">
+
+<label>공부 내용</label>
+<textarea id="studyMemo"></textarea>
+
+<label>운동 시간(분)</label>
+<input type="number" id="exerciseMinutes">
+
+<label>운동 내용</label>
+<textarea id="exerciseMemo"></textarea>
+
+<label>독서 시간(분)</label>
+<input type="number" id="readingMinutes">
+
+<label>읽은 책</label>
+<input type="text" id="bookName">
+
+<label>독서 메모</label>
+<textarea id="readingMemo"></textarea>
+
+<button
+class="btn"
+onclick="saveDailyRecord()">
+
+💾 저장
+
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>🙏 감사한 점 3가지</h2>
+
+<textarea id="gratitude"></textarea>
+
+<h2>⭐ 잘한 점 3가지</h2>
+
+<textarea id="goodThings"></textarea>
+
+<button
+class="btn"
+onclick="saveReflection()">
+
+회고 저장
+
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>🔥 습관 트래커</h2>
+
+<label>
+<input type="checkbox" class="habit" data-name="기상">
+5시 이전 기상
+</label>
+
+<br><br>
+
+<label>
+<input type="checkbox" class="habit" data-name="운동">
+운동 완료
+</label>
+
+<br><br>
+
+<label>
+<input type="checkbox" class="habit" data-name="독서">
+독서 완료
+</label>
+
+<br><br>
+
+<label>
+<input type="checkbox" class="habit" data-name="국어">
+국어 공부
+</label>
+
+<br><br>
+
+<label>
+<input type="checkbox" class="habit" data-name="수학">
+수학 공부
+</label>
+
+<br><br>
+
+<label>
+<input type="checkbox" class="habit" data-name="영어">
+영어 공부
+</label>
+
+<br><br>
+
+<button
+class="btn"
+onclick="saveHabits()">
+
+습관 저장
+
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>🏆 업적</h2>
+
+<ul id="achievementList">
+<li>아직 없음</li>
+</ul>
+
+</div>
+
+  <div class="card">
+
+<h2>📅 일정 관리</h2>
+
+<input
+type="date"
+id="eventDate">
+
+<input
+type="text"
+id="eventTitle"
+placeholder="일정 제목">
+
+<select id="eventCategory">
+
+<option value="시험">🔴 시험</option>
+
+<option value="수행">🟡 수행평가</option>
+
+<option value="목표">🟢 목표</option>
+
+<option value="일정">🔵 개인일정</option>
+
+</select>
+
+<button
+class="btn"
+onclick="addEvent()">
+
+일정 추가
+
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>📌 다가오는 일정</h2>
+
+<div id="eventList">
+
+등록된 일정 없음
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>📊 통계</h2>
+
+<div class="grid">
+
+<div class="stat-card">
+<h3>총 공부시간</h3>
+<h2 id="totalStudy">0h</h2>
+</div>
+
+<div class="stat-card">
+<h3>총 운동시간</h3>
+<h2 id="totalExercise">0m</h2>
+</div>
+
+<div class="stat-card">
+<h3>총 독서시간</h3>
+<h2 id="totalReading">0m</h2>
+</div>
+
+<div class="stat-card">
+<h3>평균 기상</h3>
+<h2 id="avgWake">--:--</h2>
+</div>
+
+</div>
+
+<br>
+
+<canvas id="studyChart"></canvas>
+
+</div>
+
+<div class="card">
+
+<h2>🎯 목표 관리</h2>
+
+<input
+id="goalTitle"
+placeholder="목표">
+
+<input
+id="goalTarget"
+type="number"
+placeholder="목표 수치">
+
+<button
+class="btn"
+onclick="addGoal()">
+
+목표 추가
+
+</button>
+
+<br><br>
+
+<div id="goalList"></div>
+
+</div>
+
+<div class="card">
+
+<h2>💾 데이터 관리</h2>
+
+<button
+class="btn"
+onclick="backupData()">
+
+백업
+
+</button>
+
+<br><br>
+
+<input
+type="file"
+id="restoreFile">
+
+<button
+class="btn"
+onclick="restoreData()">
+
+복원
+
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>💡 AI 성장 피드백</h2>
+
+<div id="aiFeedback">
+
+분석 중...
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+const quotes = [
+"오늘의 작은 행동이 미래를 만든다.",
+"꾸준함은 재능을 이긴다.",
+"완벽보다 지속이 중요하다.",
+"기록하는 사람은 성장한다.",
+"어제보다 1% 성장하기."
+];
+
+let chartInstance;
+
+function saveName(){
+
+const name =
+document.getElementById(
+"nameInput"
+).value.trim();
+
+if(!name){
+alert("이름 입력!");
+return;
+}
+
+localStorage.setItem(
+"project_s_name",
+name
+);
+
+loadDashboard();
+
+}
+
+function loadDashboard(){
+
+const name =
+localStorage.getItem(
+"project_s_name"
+);
+
+if(!name) return;
+
+document
+.getElementById("nameScreen")
+.classList.add("hidden");
+
+document
+.getElementById("dashboard")
+.classList.remove("hidden");
+
+document
+.getElementById("greeting")
+.innerText =
+`☀️ Good Morning, ${name}!`;
+
+document
+.getElementById("todayDate")
+.innerText =
+new Date()
+.toLocaleDateString(
+"ko-KR"
+);
+
+document
+.getElementById("quote")
+.innerText =
+quotes[
+Math.floor(
+Math.random()*
+quotes.length
+)
+];
+
+updateCountdown();
+loadDailyRecord();
+updateDashboardCards();
+loadEvents();
+loadGoals();
+loadStatistics();
+generateFeedback();
+
+}
+
+function updateCountdown(){
+
+const exam =
+new Date(
+"2027-11-18"
+);
+
+const today =
+new Date();
+
+const diff =
+Math.ceil(
+(exam-today)
+/(1000*60*60*24)
+);
+
+document
+.getElementById(
+"suneungCountdown"
+)
+.innerText =
+"D-"+diff;
+
+}
+
+function saveDailyRecord(){
+
+const today =
+new Date()
+.toISOString()
+.split("T")[0];
+
+const data = {
+
+wakeTime:
+wakeTime.value,
+
+sleepTime:
+sleepTime.value,
+
+studyMinutes:
+studyMinutes.value,
+
+studyMemo:
+studyMemo.value,
+
+exerciseMinutes:
+exerciseMinutes.value,
+
+exerciseMemo:
+exerciseMemo.value,
+
+readingMinutes:
+readingMinutes.value,
+
+bookName:
+bookName.value,
+
+readingMemo:
+readingMemo.value
+
+};
+
+localStorage.setItem(
+"record_"+today,
+JSON.stringify(data)
+);
+
+updateDashboardCards();
+
+alert("저장 완료");
+
+}
+
+function loadDailyRecord(){
+
+const today =
+new Date()
+.toISOString()
+.split("T")[0];
+
+const saved =
+localStorage.getItem(
+"record_"+today
+);
+
+if(!saved) return;
+
+const d =
+JSON.parse(saved);
+
+wakeTime.value =
+d.wakeTime||"";
+
+sleepTime.value =
+d.sleepTime||"";
+
+studyMinutes.value =
+d.studyMinutes||"";
+
+studyMemo.value =
+d.studyMemo||"";
+
+exerciseMinutes.value =
+d.exerciseMinutes||"";
+
+exerciseMemo.value =
+d.exerciseMemo||"";
+
+readingMinutes.value =
+d.readingMinutes||"";
+
+bookName.value =
+d.bookName||"";
+
+readingMemo.value =
+d.readingMemo||"";
+
+}
+
+function updateDashboardCards(){
+
+const today =
+new Date()
+.toISOString()
+.split("T")[0];
+
+const saved =
+localStorage.getItem(
+"record_"+today
+);
+
+if(!saved) return;
+
+const d =
+JSON.parse(saved);
+
+wakeCard.innerText =
+d.wakeTime||"--:--";
+
+studyCard.innerText =
+Math.floor(
+(d.studyMinutes||0)/60
+)+"h";
+
+exerciseCard.innerText =
+(d.exerciseMinutes||0)
++"m";
+
+readingCard.innerText =
+(d.readingMinutes||0)
++"m";
+
+}
+
+function saveReflection(){
+
+localStorage.setItem(
+"gratitude",
+gratitude.value
+);
+
+localStorage.setItem(
+"goodThings",
+goodThings.value
+);
+
+alert("회고 저장!");
+
+}
+
+function saveHabits(){
+
+alert("습관 저장 완료!");
+
+}
+
+function addEvent(){
+
+let events =
+JSON.parse(
+localStorage.getItem(
+"events"
+)
+)||[];
+
+events.push({
+
+date:eventDate.value,
+title:eventTitle.value,
+category:eventCategory.value
+
+});
+
+localStorage.setItem(
+"events",
+JSON.stringify(events)
+);
+
+loadEvents();
+
+}
+
+function loadEvents(){
+
+const box =
+document.getElementById(
+"eventList"
+);
+
+let events =
+JSON.parse(
+localStorage.getItem(
+"events"
+)
+)||[];
+
+box.innerHTML="";
+
+events.forEach(e=>{
+
+box.innerHTML +=
+
+`<div class="event-item">
+
+<strong>
+${e.title}
+</strong>
+
+<br>
+
+${e.date}
+
+</div>`;
+
+});
+
+}
+
+function addGoal(){
+
+let goals =
+JSON.parse(
+localStorage.getItem(
+"goals"
+)
+)||[];
+
+goals.push({
+
+title:
+goalTitle.value,
+
+target:
+goalTarget.value,
+
+current:0
+
+});
+
+localStorage.setItem(
+"goals",
+JSON.stringify(goals)
+);
+
+loadGoals();
+
+}
+
+function loadGoals(){
+
+const box =
+document.getElementById(
+"goalList"
+);
+
+let goals =
+JSON.parse(
+localStorage.getItem(
+"goals"
+)
+)||[];
+
+box.innerHTML="";
+
+goals.forEach(g=>{
+
+box.innerHTML +=
+
+`<div>
+
+<b>${g.title}</b>
+
+<br>
+
+${g.current}/${g.target}
+
+</div><br>`;
+
+});
+
+}
+
+function backupData(){
+
+const data = {};
+
+for(let i=0;i<localStorage.length;i++){
+
+const key =
+localStorage.key(i);
+
+data[key] =
+localStorage.getItem(key);
+
+}
+
+const blob =
+new Blob(
+[
+JSON.stringify(
+data,
+null,
+2
+)
+],
+{
+type:
+"application/json"
+}
+);
+
+const a =
+document.createElement(
+"a"
+);
+
+a.href =
+URL.createObjectURL(
+blob
+);
+
+a.download =
+"seongmin-os.json";
+
+a.click();
+
+}
+
+function restoreData(){
+
+const file =
+restoreFile.files[0];
+
+if(!file) return;
+
+const reader =
+new FileReader();
+
+reader.onload =
+function(e){
+
+const data =
+JSON.parse(
+e.target.result
+);
+
+Object.keys(data)
+.forEach(key=>{
+
+localStorage.setItem(
+key,
+data[key]
+);
+
+});
+
+location.reload();
+
+};
+
+reader.readAsText(file);
+
+}
+
+function loadStatistics(){
+
+let totalStudy=0;
+let totalExercise=0;
+let totalReading=0;
+
+for(let i=0;i<localStorage.length;i++){
+
+const key =
+localStorage.key(i);
+
+if(
+key.startsWith(
+"record_"
+)
+){
+
+const d =
+JSON.parse(
+localStorage.getItem(
+key
+)
+);
+
+totalStudy +=
+Number(
+d.studyMinutes||0
+);
+
+totalExercise +=
+Number(
+d.exerciseMinutes||0
+);
+
+totalReading +=
+Number(
+d.readingMinutes||0
+);
+
+}
+
+}
+
+totalStudy =
+(totalStudy/60)
+.toFixed(1);
+
+document
+.getElementById(
+"totalStudy"
+)
+.innerText =
+totalStudy+"h";
+
+document
+.getElementById(
+"totalExercise"
+)
+.innerText =
+totalExercise+"m";
+
+document
+.getElementById(
+"totalReading"
+)
+.innerText =
+totalReading+"m";
+
+drawChart();
+
+}
+
+function drawChart(){
+
+const ctx =
+document.getElementById(
+"studyChart"
+);
+
+if(chartInstance){
+
+chartInstance.destroy();
+
+}
+
+chartInstance =
+new Chart(ctx,{
+
+type:"bar",
+
+data:{
+
+labels:["공부"],
+
+datasets:[{
+
+label:"시간",
+
+data:[1]
+
+}]
+
+}
+
+});
+
+}
+
+function generateFeedback(){
+
+document
+.getElementById(
+"aiFeedback"
+)
+.innerHTML =
+
+"📚 오늘도 꾸준히 기록을 이어가고 있습니다.<br><br>💪 운동과 공부를 균형 있게 관리해보세요.";
+
+}
+
+if(
+localStorage.getItem(
+"project_s_name"
+)
+){
+
+loadDashboard();
+
+}
+
+  </script>
+</body>
+</html>
